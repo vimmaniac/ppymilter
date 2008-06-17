@@ -1,0 +1,21 @@
+#labels Featured
+= Pure Python Milter Wiki Page =
+
+PpyMilter is a milter protocol implementation (for sendmail, postfix, etc) that is written entirely in python.  It does not depend on libmilter.a but rather understands the milter protocol and talks directly to your MTA (over a socket).
+
+= Quick Example =
+import asyncore
+import asyncppymilterserver
+import ppymilter
+
+class MyHandler(ppymilter.PpyMilter):
+  def OnConnect(...):
+    print "MTA received a connection!"
+
+asyncppymilterserver.AsyncPpyMilterServer(port, MyHandler)
+asyncore.loop()
+
+
+* PpyMilter API link
+
+= FAQ =
