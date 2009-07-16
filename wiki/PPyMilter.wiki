@@ -3,17 +3,36 @@
 
 PpyMilter is a milter protocol implementation (for sendmail, postfix, etc) that is written entirely in python.  It does not depend on libmilter.a but rather understands the milter protocol and talks directly to your MTA (over a socket).
 
-= Quick Example =
+= No BCC Example =
+{{{
+
 import asyncore
-import asyncppymilterserver
-import ppymilter
+import ppymilterserver
+import ppymilterbase
 
-class MyHandler(ppymilter.PpyMilter):
-  def OnConnect(...):
-    print "MTA received a connection!"
+class NoBccMilter(ppymilterbase.PpyMilter):
+  def __init__(self):
+    ppymilterbase.PpyMilter(self)
+    self.CanAddHeaders()
+    self.__mutations = []
 
-asyncppymilterserver.AsyncPpyMilterServer(port, MyHandler)
-asyncore.loop()
+  def OnRcptTo(self, cmd, rcpt_to, esmtp_info):
+    self.__mutations.append(self.AddHeader('To', rcpt_to))
+    return self.Continue()
+
+  def OnEndBody(self, cmd):
+    tmp = self.__mutations
+    self.__mutations = []
+    return self.ReturnOnEndBodyActions(tmp)
+
+  def OnResetState(self):
+    self.__mutations = []
+
+if __name__ == '__main__':
+  asyncppymilterserver.AsyncPpyMilterServer(port, NoBccMilter)
+  asyncore.loop()
+
+}}}
 
 
 * PpyMilter API link
