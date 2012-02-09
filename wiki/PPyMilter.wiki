@@ -16,12 +16,13 @@ The API is pretty simple.  Take a look at the PpyMilter class in ppymilterbase.p
 #!/usr/bin/python
 
 import asyncore
-import ppymilterserver
-import ppymilterbase
+from ppymilter import ppymilterbase, ppymilterserver
+# (or just "import ppymilterbase, ppymilterserver" depending on your
+#  sys.path)
 
 class NoBccMilter(ppymilterbase.PpyMilter):
   def __init__(self):
-    ppymilterbase.PpyMilter(self)
+    ppymilterbase.PpyMilter.__init__(self)
     self.CanAddHeaders()
     self.__mutations = []
 
@@ -39,7 +40,7 @@ class NoBccMilter(ppymilterbase.PpyMilter):
     self.__mutations = []
 
 if __name__ == '__main__':
-  asyncppymilterserver.AsyncPpyMilterServer(port, NoBccMilter)
+  ppymilterserver.AsyncPpyMilterServer(port, NoBccMilter)
   asyncore.loop()
 
 }}}
