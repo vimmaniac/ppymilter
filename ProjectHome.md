@@ -1,0 +1,3 @@
+Pure python milter (mail filter) interface that is not based on the c libmilter code.  PpyMilter is akin to the perl pmilter but for python.  PpyMilter's run as standalone processes and talk directly with a milter compatible MTA (sendmail, postfix2.4+) over network sockets.
+
+Two stand-alone socket servers are provided: one single-threaded asynchronous server and one threaded socket server.  A milter base class ppymilter.PpyMilter is provided that allows milter authors to simply override the callbacks they want and worry about their programming not the milter protocol.
